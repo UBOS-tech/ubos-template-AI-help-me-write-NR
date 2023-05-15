@@ -1,0 +1,318 @@
+[
+    {
+        "id": "349813e752376814",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "ee782a44736284cf",
+        "type": "function",
+        "z": "349813e752376814",
+        "name": "function 1",
+        "func": "const api_key = global.get('token');\n\nmsg.url = 'https://api.openai.com/v1/chat/completions';\nmsg.headers = {\n    'Content-Type': 'application/json',\n    'Authorization': `Bearer ${api_key}`\n};\n\nmsg.payload = {\n    \"model\": \"gpt-3.5-turbo\",\n    \"temperature\": 0.5,\n    \"messages\": [\n        {\n            \"role\": \"system\", \"content\": `You are a smart assistant who writes an answer to a letter. Please write a reply on behalf of the user to the letter according to the request`},\n        {\n            \"role\": \"user\", \"content\": msg.payload.mail + \" Request: \" + msg.payload.prompt }\n    ]\n}\n\n\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 360,
+        "y": 220,
+        "wires": [
+            [
+                "05297e2b02fb8b1f"
+            ]
+        ]
+    },
+    {
+        "id": "05297e2b02fb8b1f",
+        "type": "http request",
+        "z": "349813e752376814",
+        "name": "",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 530,
+        "y": 220,
+        "wires": [
+            [
+                "fe7a150e5758ab93"
+            ]
+        ]
+    },
+    {
+        "id": "3d1a335a2d6d019a",
+        "type": "http in",
+        "z": "349813e752376814",
+        "name": "",
+        "url": "/sendMail",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 160,
+        "y": 220,
+        "wires": [
+            [
+                "ee782a44736284cf"
+            ]
+        ]
+    },
+    {
+        "id": "fe7a150e5758ab93",
+        "type": "http response",
+        "z": "349813e752376814",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 710,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "71e026fe1c9f22b5",
+        "type": "function",
+        "z": "349813e752376814",
+        "name": "function 2",
+        "func": "const api_key = global.get('token');\n\nmsg.url = 'https://api.openai.com/v1/chat/completions';\nmsg.headers = {\n    'Content-Type': 'application/json',\n    'Authorization': `Bearer ${api_key}`\n};\n\nif (msg.payload.type === 'shorter') {\n    msg.payload = {\n        \"model\": \"gpt-3.5-turbo\",\n        \"temperature\": 0.5,\n        \"messages\": [\n            {\n                \"role\": \"system\", \"content\": `You are a smart assistant who change mail to be shorter without change context. Return just changed email text without title`\n            },\n            {\n                \"role\": \"user\", \"content\": \" Mail: \" + msg.payload.mail\n            }\n        ]\n    }\n}\n\nif (msg.payload.type === 'elaborate') {\n\n    msg.payload = {\n        \"model\": \"gpt-3.5-turbo\",\n        \"temperature\": 0.5,\n        \"messages\": [\n            {\n                \"role\": \"system\", \"content\": `You are a smart assistant who change mail to be more elaborate without change context.`\n            },\n            {\n                \"role\": \"user\", \"content\": \" Mail: \" + msg.payload.mail\n            }\n        ]\n    }\n}\nif (msg.payload.type === 'formalize') {\n\n    msg.payload = {\n        \"model\": \"gpt-3.5-turbo\",\n        \"temperature\": 0.5,\n        \"messages\": [\n            {\n                \"role\": \"system\", \"content\": `You are a smart assistant who change mail to be more formalize without change context.`\n            },\n            {\n                \"role\": \"user\", \"content\": \" Mail: \" + msg.payload.mail\n            }\n        ]\n    }\n\n}\n\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 360,
+        "y": 320,
+        "wires": [
+            [
+                "0d92776be5fda4f4"
+            ]
+        ]
+    },
+    {
+        "id": "0d92776be5fda4f4",
+        "type": "http request",
+        "z": "349813e752376814",
+        "name": "",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 530,
+        "y": 320,
+        "wires": [
+            [
+                "04050d1738600a21"
+            ]
+        ]
+    },
+    {
+        "id": "b1f7cb0d0cf0de19",
+        "type": "http in",
+        "z": "349813e752376814",
+        "name": "",
+        "url": "/changeMail",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 170,
+        "y": 320,
+        "wires": [
+            [
+                "71e026fe1c9f22b5"
+            ]
+        ]
+    },
+    {
+        "id": "04050d1738600a21",
+        "type": "http response",
+        "z": "349813e752376814",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 710,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "2c42a91b8b33b680",
+        "type": "function",
+        "z": "349813e752376814",
+        "name": "function 4",
+        "func": "global.set(\"token\", '');\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 300,
+        "y": 60,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "6fd1f31b0f3e3364",
+        "type": "inject",
+        "z": "349813e752376814",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 160,
+        "y": 60,
+        "wires": [
+            [
+                "2c42a91b8b33b680"
+            ]
+        ]
+    },
+    {
+        "id": "1740a5bb4ea2d6df",
+        "type": "function",
+        "z": "349813e752376814",
+        "name": "function 6",
+        "func": "const api_key = global.get('token');\n\nmsg.url = 'https://api.openai.com/v1/chat/completions';\nmsg.headers = {\n    'Content-Type': 'application/json',\n    'Authorization': `Bearer ${api_key}`\n};\n\nmsg.payload = {\n    \"model\": \"gpt-3.5-turbo\",\n    \"temperature\": 0.5,\n    \"messages\": [\n        {\n            \"role\": \"system\", \"content\": `You are a smart assistant who writes an email. Please write a structured detailed letter according to the request`},\n        {\n            \"role\": \"user\", \"content\": \" Request: \" + msg.payload.prompt }\n    ]\n}\n\n\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 360,
+        "y": 420,
+        "wires": [
+            [
+                "8076c4b67d57da6e"
+            ]
+        ]
+    },
+    {
+        "id": "8076c4b67d57da6e",
+        "type": "http request",
+        "z": "349813e752376814",
+        "name": "",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 530,
+        "y": 420,
+        "wires": [
+            [
+                "cf6bb89e6b9a23c6"
+            ]
+        ]
+    },
+    {
+        "id": "e174c28d0a5b1cd5",
+        "type": "http in",
+        "z": "349813e752376814",
+        "name": "",
+        "url": "/writeMail",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 160,
+        "y": 420,
+        "wires": [
+            [
+                "1740a5bb4ea2d6df"
+            ]
+        ]
+    },
+    {
+        "id": "cf6bb89e6b9a23c6",
+        "type": "http response",
+        "z": "349813e752376814",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 710,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "ca995bbfe1692c6b",
+        "type": "template",
+        "z": "349813e752376814",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "css",
+        "syntax": "mustache",
+        "template": ".gridWrap{\n    right: 0px !important;\n    top: 0px !important;\n    height: 100vh !important;\n    width: 100vw;\n    padding: 4px 0px !important;\n}\n\n.selectedTab{\nbox-shadow: rgb(235, 239, 242) -1px 0px 0px inset, rgb(235, 239, 242) 0px 0px 0px inset, rgb(141, 194, 111) 0px 4px 0px inset !important;\n\n}\n\n.btn button>span {\n    color: white !important;\n}\n\nbutton{\n    color: white !important;\n}\n\n",
+        "output": "str",
+        "x": 360,
+        "y": 120,
+        "wires": [
+            [
+                "8ba3f9560315e880"
+            ]
+        ]
+    },
+    {
+        "id": "e14b6d1dbc62f3dd",
+        "type": "http in",
+        "z": "349813e752376814",
+        "name": "",
+        "url": "/css",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 140,
+        "y": 120,
+        "wires": [
+            [
+                "ca995bbfe1692c6b"
+            ]
+        ]
+    },
+    {
+        "id": "8ba3f9560315e880",
+        "type": "http response",
+        "z": "349813e752376814",
+        "name": "",
+        "statusCode": "",
+        "headers": {
+            "content-type": "text/css"
+        },
+        "x": 530,
+        "y": 120,
+        "wires": []
+    }
+]
