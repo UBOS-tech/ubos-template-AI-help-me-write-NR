@@ -160,7 +160,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 300,
+        "x": 320,
         "y": 60,
         "wires": [
             []
